@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Undangan Pernikahan - Devi & Sahrudin</title>
+    <meta name="description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami.">
+    <meta name="author" content="fhudint">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dvdiana--fhudint.replit.app/">
+    <meta property="og:title" content="Pernikahan Devi Diana Agustin & Sahrudin">
+    <meta property="og:description" content="Jum'at, 18 September 2026 | Klik untuk melihat detail acara dan lokasi.">
+    <meta property="og:image" content="https://dvdiana--fhudint.replit.app/assets/floral-pink.webp">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://dvdiana--fhudint.replit.app/">
+    <meta name="twitter:title" content="Pernikahan Devi Diana Agustin & Sahrudin">
+    <meta name="twitter:description" content="Tanpa mengurangi rasa hormat, kami mengundang Anda untuk hadir di hari bahagia kami.">
+    <meta name="twitter:image" content="https://dvdiana--fhudint.replit.app/assets/floral-pink.webp">
+
+    <link rel="icon" type="image/png" href="/assets/heart-solid.png">
+    <link rel="shortcut icon" type="image/png" href="/assets/heart-solid.png">
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Sacramento&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Stalemate&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Pop-up Rare Drop Notification (Default disembunyikan pakai CSS d-none/hidden) -->
+    <div id="rare-popup" style="display: none; position: fixed; top: 30px; left: 50%; transform: translateX(-50%); background: #111; color: #fff; padding: 12px 24px; border-radius: 30px; z-index: 9999; box-shadow: 0 10px 25px rgba(0,0,0,0.3); font-family: sans-serif; text-align: center; border: 1px solid #d4af37;">
+        <span style="font-size: 14px;">✨ <b>ACHIEVEMENT!</b> Kamu dapet lagu kejutan spesial! 🎶</span>
+    </div>
+    <!-- =========================================
+         INVITATION OPENING OVERLAY (Lock Screen)
+         ========================================= -->
+    <div class="invitation-overlay" id="invitation-overlay">
+        <!-- Decorative top ornament -->
+        <div class="overlay-ornament overlay-ornament-top">
+            <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,60 Q50,0 100,30 Q150,60 200,0 L200,60 Z" fill="rgba(250,246,240,0.08)"/>
+            </svg>
+        </div>
+
+        <div class="overlay-inner">
+            <!-- Small decorative line -->
+            <div class="overlay-divider"></div>
+
+            <p class="overlay-eyebrow">Undangan Pernikahan</p>
+
+            <!-- Couple Names -->
+            <div class="overlay-names">
+                <span class="overlay-name-bride">Devi Diana Agustin</span>
+                <span class="overlay-ampersand">&amp;</span>
+                <span class="overlay-name-groom">Sahrudin</span>
+            </div>
+
+            <!-- Wedding Date -->
+            <div class="overlay-date-block">
+                <span class="overlay-date-day">Jumat</span>
+                <span class="overlay-date-num">18</span>
+                <span class="overlay-date-month">September 2026</span>
+            </div>
+
+            <!-- Guest Recipient Block (Populated dynamically via URL ?to= or /to?= parameter) -->
+            <div class="overlay-guest-box" id="overlay-guest-box" style="display: none; margin: 1rem 0; text-align: center;">
+                <p class="guest-label" style="font-size: 0.8rem; text-transform: lowercase; letter-spacing: 0.08em; opacity: 0.7; margin-bottom: 0.3rem;">kepada Yth. bapak/ibu/saudara/i:</p>
+                <h3 class="guest-name" id="guest-name" style="font-size: 1.5rem; font-weight: 700; color: var(--color-cream); margin: 0; text-transform: capitalize;"></h3>
+            </div>
+
+            <!-- Small decorative line -->
+            <div class="overlay-divider"></div>
+
+            <!-- Open Invitation Button -->
+            <button class="btn-buka-undangan" id="btn-buka-undangan" onclick="openInvitation()">
+                <span>Buka Undangan</span>
+                <i class="fa-solid fa-envelope-open"></i>
+            </button>
+
+            <p class="overlay-hint">ketuk untuk membuka</p>
+        </div>
+
+        <!-- Decorative bottom ornament -->
+        <div class="overlay-ornament overlay-ornament-bottom">
+            <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,0 Q50,60 100,30 Q150,0 200,60 L200,0 Z" fill="rgba(250,246,240,0.08)"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Background Music (Audio Element) -->
+    <audio id="bg-music" loop preload="auto"></audio>
+
+    <!-- Music Toggle Button (Fixed Float) -->
+    <button class="music-toggle-btn" id="music-toggle-btn" aria-label="Mute/Unmute Musik">
+        <i class="fa-solid fa-compact-disc disc-icon"></i>
+    </button>
+
+    <!-- Wrapper for Hero & Announcement (for sticky behavior) -->
+    <div class="hero-wrapper">
+        <!-- 1. Top Announcement Marquee Ticker -->
+        <div class="announcement-bar" id="announcement-bar">
+            <div class="ticker-track">
+                <!-- Set 1 -->
+                <div class="ticker-set">
+                    <span>Devi Diana Agustin</span>
+                    <span class="dot">•</span>
+                    <span>Sahrudin</span>
+                    <span class="dot">•</span>
+                    <span>18 September 2026</span>
+                    <span class="dot">•</span>
+                    <span>Kaduluhur, Sumpinghayu, Kec. Dayeuhluhur, Kabupaten Cilacap, Jawa Tengah 53266</span>
+                    <span class="dot">•</span>
+                    <span>Devi Diana Agustin</span>
+                    <span class="dot">•</span>
+                    <span>Sahrudin</span>
+                    <span class="dot">•</span>
+                    <span>18 September 2026</span>
+                    <span class="dot">•</span>
+                    <span>Kaduluhur, Sumpinghayu, Kec. Dayeuhluhur, Kabupaten Cilacap, Jawa Tengah 53266</span>
+                    <span class="dot">•</span>
+                </div>
+                <!-- Set 2 — exact duplicate for seamless join -->
+                <div class="ticker-set" aria-hidden="true">
+                    <span>Devi Diana Agustin</span>
+                    <span class="dot">•</span>
+                    <span>Sahrudin</span>
+                    <span class="dot">•</span>
+                    <span>18 September 2026</span>
+                    <span class="dot">•</span>
+                    <span>Kaduluhur, Sumpinghayu, Kec. Dayeuhluhur, Kabupaten Cilacap, Jawa Tengah 53266</span>
+                    <span class="dot">•</span>
+                    <span>Devi Diana Agustin</span>
+                    <span class="dot">•</span>
+                    <span>Sahrudin</span>
+                    <span class="dot">•</span>
+                    <span>18 September 2026</span>
+                    <span class="dot">•</span>
+                    <span>Kaduluhur, Sumpinghayu, Kec. Dayeuhluhur, Kabupaten Cilacap, Jawa Tengah 53266</span>
+                    <span class="dot">•</span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Header Navigation -->
+        <header class="main-header" id="main-header">
+            <div class="header-container">
+                <div class="nav-left">
+                    <!-- Spacer/Empty since logo is moved to announcement bar -->
+                </div>
+                <nav class="nav-center">
+                    <!-- Mempelai with dropdown -->
+                    <div class="nav-dropdown-wrap" id="nav-dropdown-wrap">
+                        <button class="nav-link nav-dropdown-trigger" id="nav-mempelai-trigger" aria-expanded="false">
+                            mempelai <i class="fa-solid fa-chevron-down nav-chevron"></i>
+                        </button>
+                        <!-- Dropdown panel -->
+                        <div class="nav-dropdown-panel" id="nav-dropdown-panel" role="dialog" aria-label="Menu mempelai">
+                            <a href="#mempelai-wanita-group" class="dropdown-card" id="dd-wanita">
+                                <span class="dropdown-card-eyebrow">mempelai wanita</span>
+                                <h3 class="dropdown-card-name">devi diana agustin</h3>
+                                <p class="dropdown-card-desc">S.Ds. — putri tercinta dari Bapak Sahlan &amp; Ibu Maryati. Sosok kreatif yang membawa kehangatan di mep langkah.</p>
+                                <i class="fa-solid fa-arrow-right dropdown-card-arrow"></i>
+                            </a>
+                            <a href="#mempelai-pria-group" class="dropdown-card" id="dd-pria">
+                                <span class="dropdown-card-eyebrow">mempelai pria</span>
+                                <h3 class="dropdown-card-name">sahrudin</h3>
+                                <p class="dropdown-card-desc">putra tercinta dari Bapak Karno &amp; Ibu Tarmini. Sosok tangguh yang bersiap mengarungi perjalanan baru bersama.</p>
+                                <i class="fa-solid fa-arrow-right dropdown-card-arrow"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#acara-group" class="nav-link">acara</a>
+                    <a href="#rsvp" class="nav-link">rsvp</a>
+                </nav>
+                <div class="nav-right">
+                    <!-- Profile & Cart icons removed -->
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section with Layered Parallax -->
+        <section class="hero-section" id="hero-section">
+            <!-- Parallax Background Image -->
+            <div class="parallax-bg" id="parallax-bg"></div>
+
+            <!-- Confetti Canvas & Interactive Elements -->
+            <div class="pricing-hero__proxy" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index: 4;"></div>
+            
+            <div class="explosion-preload" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden; opacity: 0;">
+                <img data-key="blue-circle" src="https://assets.codepen.io/16327/2D-circles.png" />
+                <img data-key="green-keyframe" src="https://assets.codepen.io/16327/2D-keyframe.png" />
+                <img data-key="orange-lightning" src="https://assets.codepen.io/16327/2D-lightning.png" />
+                <img data-key="orange-star" src="https://assets.codepen.io/16327/2D-star.png" />
+                <img data-key="purple-flower" src="https://assets.codepen.io/16327/2D-flower.png" />
+                <img data-key="cone" src="https://assets.codepen.io/16327/3D-cone.png" />
+                <img data-key="spiral" src="https://assets.codepen.io/16327/3D-spiral.png" />
+                <img data-key="tunnel" src="https://assets.codepen.io/16327/3D-tunnel.png" />
+                <img data-key="hoop" src="https://assets.codepen.io/16327/3D-hoop.png" />
+                <img data-key="semi" src="https://assets.codepen.io/16327/3D-semi.png" />
+            </div>
+            
+            <!-- Foreground Content Layer -->
+            <div class="hero-foreground">
+                <!-- Huge Hero Typography (GSAP Homepage Style) -->
+                <div class="hero-typography-container">
+
+                    <!-- Devi Row -->
+                    <h1 class="hero-title hero-title-devi">
+                        <span class="flair-word-wrap" style="position: relative; display: inline-block;">
+                            <span>
+                                
+                                    <!-- Windmill flair placed behind character 'e' -->
+                                    <div class="home-hero__flair home-hero__flair--windmill" style="width: 1.1em; height: 1.1em;">
+                                        <svg viewBox="0 0 137 135" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M84.1148 67.3453H136.194C136.637 67.3453 137 67.7028 137 68.1397V134.043C137 134.484 136.633 134.845 136.186 134.841C99.0222 134.416 68.9737 104.827 68.502 68.2191V134.206C68.502 134.643 68.1392 135 67.6958 135H0.814284C0.366822 135 -2.06673e-05 134.639 0.00401052 134.198C0.439379 97.2879 30.9354 67.5042 68.498 67.5002H0.806238C0.362807 67.5002 0 67.1427 0 66.7057V0.802561C0 0.361644 0.366822 0.000171863 0.814284 0.00414409C37.9778 0.429172 68.0263 30.0183 68.498 66.6263V0.794617C68.498 0.357672 68.8608 0.000171819 69.3042 0.000171819H136.186C136.633 0.000171819 137 0.361644 136.996 0.802561C136.621 32.4969 114.079 58.94 83.9334 65.7802C83.0022 65.9907 83.1594 67.3453 84.1189 67.3453H84.1148Z" fill="var(--color-orange)"></path>
+                                        </svg>
+                                    </div>
+                                    
+                                <span id="animated-devi" style="font-weight: inherit;">Devi Diana A.</span>
+                            </span>
+                        </span>
+                    </h1>
+                
+                    <!-- Sahrudin Row -->
+                    <h1 class="hero-title hero-title-sahrudin">
+                        <span class="flair-word-wrap" style="position: relative; display: inline-block;">
+                            <span>
+                                &amp; <span class="char-a-wrap" style="position: relative; display: inline-block; vertical-align: baseline;">
+                                    <div class="home-hero__flair home-hero__flair--circles" style="width: 1.1em; height: 1.1em;">
+                                        <svg viewBox="0 0 156 156" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M45.9341 76.316C43.4159 76.8454 40.8068 77.1236 38.1333 77.1236C17.0729 77.1236 0 59.8589 0 38.5618C0 17.2647 17.0729 0 38.1333 0C59.1938 0 76.2666 17.2647 76.2666 38.5618C76.2666 40.3457 76.1469 42.1013 75.915 43.8209H80.0849C79.853 42.1013 79.7332 40.3457 79.7332 38.5618C79.7332 17.2647 96.8061 0 117.867 0C138.927 0 156 17.2647 156 38.5618C156 59.8589 138.927 77.1236 117.867 77.1236C115.499 77.1236 113.182 76.9054 110.934 76.4879V79.5128C113.182 79.0953 115.499 78.8771 117.867 78.8771C138.927 78.8771 156 96.1418 156 117.439C156 138.736 138.927 156.001 117.867 156.001C96.8064 156.001 79.7335 138.736 79.7335 117.439C79.7335 114.736 80.0086 112.097 80.5319 109.551H75.6376C76.0508 111.825 76.2667 114.169 76.2667 116.564C76.2667 137.861 59.1938 155.126 38.1334 155.126C17.0729 155.126 6.30037e-05 137.861 6.30037e-05 116.564C6.30037e-05 95.2671 17.0729 78.0024 38.1334 78.0024C40.8068 78.0024 43.416 78.2806 45.9341 78.8099V76.316Z" fill="var(--color-peach)"></path>
+                                        </svg>
+                                    </div>
+                                    <span></span>
+                                </span>
+                                    <!-- Star flair -->
+                                    <div class="home-hero__flair home-hero__flair--star" style="width: 1.1em; height: 1.1em;">
+                                        <svg viewBox="0 0 157 156" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M82.2214 104.04L105.483 143.586C108.242 148.276 114.274 149.852 118.974 147.112V147.112C123.675 144.371 125.275 138.345 122.552 133.634L99.5971 93.9091L144.009 105.424C149.276 106.79 154.656 103.639 156.042 98.3773V98.3773C157.428 93.1154 154.298 87.7233 149.042 86.317L104.72 74.4593L144.266 51.1978C148.957 48.439 150.533 42.407 147.792 37.7062V37.7062C145.052 33.0054 139.026 31.4057 134.314 34.1282L94.5898 57.0835L106.105 12.6719C107.471 7.40463 104.32 2.02469 99.058 0.638673V0.638673C93.7961 -0.747342 88.4041 2.38242 86.9977 7.63895L75.14 51.9603L51.8786 12.4142C49.1197 7.72403 43.0878 6.14763 38.387 8.8883V8.8883C33.6862 11.629 32.0865 17.6548 34.809 22.3662L57.7643 62.0908L13.3526 50.5758C8.08539 49.2101 2.70545 52.3607 1.31944 57.6226V57.6226C-0.0665745 62.8845 3.06319 68.2766 8.31971 69.6829L52.6411 81.5406L13.095 104.802C8.4048 107.561 6.8284 113.593 9.56907 118.294V118.294C12.3097 122.994 18.3356 124.594 23.0469 121.872L62.7716 98.9164L51.2566 143.328C49.8909 148.595 53.0414 153.975 58.3034 155.361V155.361C63.5653 156.747 68.9573 153.617 70.3637 148.361L82.2214 104.04Z" fill="var(--color-orange)"></path>
+                                        </svg>
+                                    </div>
+                                    
+                                <span id="animated-sahrudin" style="font-weight: inherit;">Sahrudin</span>
+                            </span>
+                        </span>
+                    </h1>
+                </div>
+            
+                <div class="hero-foreground-content">
+                    <a href="#mempelai-wanita-group" class="scroll-indicator" id="scroll-indicator">
+                        <span class="scroll-indicator-text">gulir ke bawah</span>
+                        <div class="scroll-indicator-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Mempelai Wanita Section Group -->
+    <div class="bridegroom-group" id="mempelai-wanita-group">
+        <!-- Mempelai Wanita Section Banner -->
+        <div class="flavor-banner" id="mempelai-wanita">
+            <span class="flavor-text">mempelai wanita</span>
+        </div>
+
+        <!-- Details/Intro Section (Mempelai Wanita Details) -->
+        <section class="details-section" id="mempelai-wanita-details">
+            <div class="details-container">
+                <!-- Left Column: Big bold text -->
+                <div class="details-left">
+                    <h2 class="details-headline"><span class="highlight">devi diana agustin</span></h2>
+                </div>
+                
+                <!-- Right Column: Description, Parents, Actions -->
+                <div class="details-right">
+                    <p class="details-description">
+                        pertemuan yang hangat membawa kami ke jenjang yang indah. kami sangat gembira mengundang Anda untuk merayakan momen bahagia penyatuan cinta kami.
+                    </p>
+
+                    <div class="spec-group">
+                        <span class="spec-label">nama lengkap:</span>
+                        <div class="spec-value">
+                            <strong>Devi Diana Agustin</strong>
+                        </div>
+                    </div>
+
+                    <div class="spec-group">
+                        <span class="spec-label">putri kedua dari:</span>
+                        <div class="spec-value">
+                            <strong>Bpk. Sahlan &amp; Ibu Maryati</strong>
+                            <span>Cilacap</span>
+                        </div>
+                    </div>
+
+                    <div class="section-actions">
+                        <button type="button" onclick="openGiftModal('wanita')" class="btn-action-dark"><i class="fa-solid fa-gift"></i> kirim kado</button>
+                        <a href="https://instagram.com/dvdianaa__" target="_blank" rel="noopener noreferrer" class="btn-action-outline"><i class="fa-brands fa-instagram"></i> @dvdianaa__</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Mempelai Pria Section Group (Sage Green Theme) -->
+    <div class="bridegroom-group groom-group" id="mempelai-pria-group">
+        <!-- Mempelai Pria Section Banner -->
+        <div class="flavor-banner groom-banner" id="mempelai-pria">
+            <span class="flavor-text">mempelai pria</span>
+        </div>
+
+        <!-- Details/Intro Section (Mempelai Pria Details) -->
+        <section class="details-section groom-section" id="mempelai-pria-details">
+            <div class="details-container">
+                <!-- Left Column: Big bold text -->
+                <div class="details-left">
+                    <h2 class="details-headline"><span class="highlight">sahrudin</span></h2>
+                </div>
+                
+                <!-- Right Column: Description, Parents, Actions -->
+                <div class="details-right">
+                    <p class="details-description">
+                        dengan penuh kesungguhan dan ketulusan hati, melangkah bersama membina masa depan yang dipenuhi oleh cinta dan ridho-nya.
+                    </p>
+
+                    <div class="spec-group">
+                        <span class="spec-label">nama lengkap:</span>
+                        <div class="spec-value">
+                            <strong>Sahrudin, S.Ag</strong>
+                        </div>
+                    </div>
+
+                    <div class="spec-group">
+                        <span class="spec-label">putra kedua dari:</span>
+                        <div class="spec-value">
+                            <strong>Bpk. Karno & Ibu Tarmini</strong>
+                            <span>Cilacap</span>
+                        </div>
+                    </div>
+
+                    <div class="section-actions">
+                        <button type="button" onclick="openGiftModal('pria')" class="btn-action-dark"><i class="fa-solid fa-gift"></i> kirim kado</button>
+                        <a href="https://instagram.com/fhudint__" target="_blank" rel="noopener noreferrer" class="btn-action-outline"><i class="fa-brands fa-instagram"></i> @fhudint__</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Acara Section Group with Blue Color Palette -->
+    <div class="acara-group" id="acara-group">
+        <!-- Acara Section Banner -->
+        <div class="flavor-banner event-banner" id="acara">
+            <span class="flavor-text">acara pernikahan</span>
+        </div>
+
+        <!-- Details/Intro Section (Acara Details) -->
+        <section class="details-section event-section" id="event-section">
+            <div class="event-intro-container">
+                <span class="event-subtitle">hari pernikahan</span>
+                <h2 class="event-main-headline">
+                    momen sakral <span class="inline-oval" style="background-image: url('assets/couple-portrait.webp')"></span> akad dan resepsi dirancang penuh rasa syukur, sehingga <span class="inline-oval" style="background-image: url('assets/floral-pink.webp')"></span> Anda dapat merayakan kebahagiaan bersama kami.
+                </h2>
+            </div>
+
+            <!-- Grid Columns mirroring gethapply features layout -->
+            <div class="event-features-grid">
+                <div class="feature-col">
+                    <div class="feature-icon"><i class="fa-solid fa-home"></i></div>
+                    <h3 class="feature-title">akad nikah</h3>
+                    <p class="feature-desc">
+                        08:00 - 10:00 WIB<br>
+                        <strong>Kediaman Mempelai Wanita</strong><br>
+                        Jl. Pasir Sawo, Dsn. Kaduluhur RT 02 RW 01 Desa Sumpinghayu
+                    </p>
+                </div>
+                <div class="feature-col">
+                    <div class="feature-icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+                    <h3 class="feature-title">resepsi</h3>
+                    <p class="feature-desc">
+                        10:00 WIB - selesai<br>
+                        <strong>Kediaman Mempelai Wanita</strong><br>
+                        Jl. Pasir Sawo, Dsn. Kaduluhur RT 02 RW 01 Desa Sumpinghayu
+                    </p>
+                </div>
+                <div class="feature-col">
+                    <div class="feature-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <h3 class="feature-title">rsvp & lokasi</h3>
+                    <p class="feature-desc">
+                        mohon konfirmasi kehadiran Anda dan temukan rute lokasi maps di bawah ini.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Buttons at bottom of features -->
+            <div class="event-actions-container">
+                <a href="#rsvp" class="btn-action-dark"><i class="fa-solid fa-calendar-plus"></i> konfirmasi rsvp</a>
+                <a href="https://maps.app.goo.gl/dHyFsdVSnaFkgwEe9?g_st=ic" target="_blank" class="btn-action-outline"><i class="fa-solid fa-location-dot"></i> peta lokasi</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- RSVP Section -->
+    <section class="rsvp-section" id="rsvp">
+        <div class="rsvp-container">
+            <div class="rsvp-header">
+                <span class="rsvp-subtitle">Hadiri Hari Istimewa Kami</span>
+                <h2 class="rsvp-headline">rsvp & ucapan</h2>
+                <p class="rsvp-desc">mohon konfirmasikan kehadiran Anda sebelum tanggal 10 september 2026.</p>
+            </div>
+
+            <form class="rsvp-form" id="rsvpForm">
+                <div class="form-group">
+                    <label for="rsvp-name" class="form-label">nama lengkap</label>
+                    <input type="text" id="rsvp-name" class="form-input" placeholder="tulis nama lengkap Anda" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rsvp-attendance" class="form-label">konfirmasi kehadiran</label>
+                        <select id="rsvp-attendance" class="form-select" required>
+                            <option value="" disabled selected>pilih kehadiran</option>
+                            <option value="hadir">hadir</option>
+                            <option value="tidak-hadir">tidak hadir</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rsvp-guests" class="form-label">jumlah tamu</label>
+                        <select id="rsvp-guests" class="form-select">
+                            <option value="1">1 orang</option>
+                            <option value="2">2 orang</option>
+                            <option value="3">3 orang</option>
+                            <option value="4">4 orang</option>
+                            <option value="5">5 orang</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="rsvp-wishes" class="form-label">ucapan & doa restu</label>
+                    <textarea id="rsvp-wishes" class="form-textarea" placeholder="tulis ucapan manis atau doa untuk mempelai..." rows="4"></textarea>
+                </div>
+
+                <button type="submit" class="btn-rsvp-submit">kirim rsvp <i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+            
+            <!-- Success Message -->
+            <div class="rsvp-success-message" id="rsvpSuccessMessage" style="display: none;">
+                <i class="fa-solid fa-circle-check"></i>
+                <h3>terima kasih!</h3>
+                <p>konfirmasi rsvp Anda telah berhasil terkirim.</p>
+        </div>
+    </section>
+
+    <!-- Guestbook Feed Section -->
+    <section class="guestbook-section" id="guestbook">
+        <div class="guestbook-header">
+            <span class="guestbook-eyebrow">dari para tamu</span>
+            <h2 class="guestbook-headline">ucapan &amp; doa</h2>
+            <p class="guestbook-desc">setiap doa dan ucapan adalah hadiah terindah untuk kami.</p>
+        </div>
+        <!-- Feed will be populated by JavaScript from localStorage -->
+        <div class="guestbook-feed" id="guestbook-feed">
+            <div class="guestbook-empty" id="guestbook-empty">
+                <i class="fa-regular fa-comment-dots"></i>
+                <p>belum ada ucapan. jadilah yang pertama!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="main-footer" id="main-footer" style="position: relative; overflow: visible;">
+        <!-- Giant "apipi" Text Container with overflow hidden for slide up reveal -->
+        <div class="footer-giant-text-container">
+            <span class="footer-giant-text" id="footer-giant-apipi">apipi</span>
+        </div>
+
+        <!-- Copyright Row -->
+        <div class="footer-copyright-row">
+            <span class="copyright-left">All Rights Reserved | Copyright ©2026 - fhudint</span>
+        </div>
+
+        <!-- Footer Bouncy Wave Container at very bottom (footer-bounce) -->
+        <div class="footer-bouncy-wrapper" id="footer-bouncy-wrapper" style="position: relative; width: calc(100% + 10vw); margin-left: -5vw; margin-right: -5vw; margin-bottom: -3vw; overflow: visible; z-index: 5;">
+            <svg preserveAspectRatio="none" id="footer-bouncy-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2278 683" style="width: 100%; height: 80px; display: block; overflow: visible;">
+                <path id="bouncy-path" fill="var(--color-cream)" d="M0-0.3C0-0.3,464,156,1139,156S2278-0.3,2278-0.3V683H0V-0.3z"/>
+            </svg>
+        </div>
+    </footer>
+
+    <!-- Mempelai Bottom Sheet (Mobile) -->
+    <div class="mempelai-sheet-backdrop" id="mempelai-sheet-backdrop"></div>
+    <div class="mempelai-sheet" id="mempelai-sheet">
+        <div class="mempelai-sheet-handle"></div>
+        <p class="mempelai-sheet-title">mempelai</p>
+        <div class="mempelai-sheet-cards">
+            <a href="#mempelai-wanita-group" class="dropdown-card sheet-card" id="sheet-dd-wanita">
+                <span class="dropdown-card-eyebrow">mempelai wanita</span>
+                <h3 class="dropdown-card-name">devi diana agustin</h3>
+                <p class="dropdown-card-desc">putri tercinta Bapak Sahlan &amp; Ibu Maryati.</p>
+                <i class="fa-solid fa-arrow-right dropdown-card-arrow"></i>
+            </a>
+            <a href="#mempelai-pria-group" class="dropdown-card sheet-card" id="sheet-dd-pria">
+                <span class="dropdown-card-eyebrow">mempelai pria</span>
+                <h3 class="dropdown-card-name">sahrudin</h3>
+                <p class="dropdown-card-desc">putra tercinta Bapak Karno &amp; Ibu Tarmini.</p>
+                <i class="fa-solid fa-arrow-right dropdown-card-arrow"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="back-to-top" aria-label="Kembali ke atas">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Gift Modal (SeaBank Account Info) -->
+    <div class="gift-modal-backdrop" id="gift-modal-backdrop" onclick="closeGiftModal()"></div>
+    <div class="gift-modal" id="gift-modal" role="dialog" aria-modal="true">
+        <button class="gift-modal-close" onclick="closeGiftModal()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+        <div class="gift-modal-header">
+            <i class="fa-solid fa-gift gift-modal-icon"></i>
+            <h3 id="gift-modal-title">amplop digital &amp; kado</h3>
+            <p>doa restu Anda merupakan hadiah terindah. Bagi yang ingin memberikan tanda kasih, dapat disalurkan melalui rekening berikut:</p>
+        </div>
+
+        <!-- Rekening Mempelai Wanita -->
+        <div class="bank-card bank-card-wanita" id="card-wanita">
+            <div class="bank-badge-row">
+                <span class="bank-badge">SeaBank</span>
+                <span class="bank-person-tag">Mempelai Wanita</span>
+            </div>
+            <div class="bank-account-info">
+                <span class="bank-label">nomor rekening:</span>
+                <div class="rekening-row">
+                    <span class="rekening-number" id="seabank-wanita">901234567891</span>
+                    <button class="btn-copy-rekening" onclick="copyBankAccount('seabank-wanita', event)">
+                        <i class="fa-regular fa-copy"></i> salin
+                    </button>
+                </div>
+                <span class="bank-owner">a.n. Devi Diana Agustin</span>
+            </div>
+        </div>
+
+        <!-- Rekening Mempelai Pria -->
+        <div class="bank-card bank-card-pria" id="card-pria">
+            <div class="bank-badge-row">
+                <span class="bank-badge">SeaBank</span>
+                <span class="bank-person-tag">Mempelai Pria</span>
+            </div>
+            <div class="bank-account-info">
+                <span class="bank-label">nomor rekening:</span>
+                <div class="rekening-row">
+                    <span class="rekening-number" id="seabank-pria">901234567892</span>
+                    <button class="btn-copy-rekening" onclick="copyBankAccount('seabank-pria', event)">
+                        <i class="fa-regular fa-copy"></i> salin
+                    </button>
+                </div>
+                <span class="bank-owner">a.n. Sahrudin</span>
+            </div>
+        </div>
+
+        <div class="gift-modal-footer">
+            <p><i class="fa-solid fa-heart" style="color: var(--color-orange);"></i> terima kasih atas kebaikan &amp; doa restu Anda</p>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="mobile-bottom-nav">
+        <a href="#hero-section" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>home</span>
+        </a>
+        <button class="nav-item" id="mobile-mempelai-btn">
+            <i class="fa-solid fa-heart"></i>
+            <span>mempelai</span>
+        </button>
+        <a href="#acara-group" class="nav-item">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>acara</span>
+        </a>
+        <a href="#rsvp" class="nav-item">
+            <i class="fa-solid fa-envelope-open-text"></i>
+            <span>rsvp</span>
+        </a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>
+    <!-- GSAP Observer, MotionPath & MorphSVG plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Observer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/EasePack.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <script src="https://assets.codepen.io/16327/MorphSVGPlugin3.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
